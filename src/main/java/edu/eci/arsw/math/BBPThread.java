@@ -6,18 +6,43 @@ public class BBPThread extends Thread{
     private static double Epsilon = 1e-17;
     private int start;
     private int count;
-    byte[] digits;
+    private byte[] digits;
+    private int threadId;
+    private Object lock;
 
-    public BBPThread(int start, int count){
+    private Boolean running;
+
+    private Boolean alive;
+
+
+    public BBPThread(int start, int count, int Id, Object lock){
         this.start = start;
         this.count = count;
         digits = new byte[count];
+        this.threadId = Id;
+        this.lock = lock;
+        this.running = true;
+        this.alive = true;
     }
 
     @Override
     public void run() {
+        long startTime = System.currentTimeMillis();
         double sum = 0;
         for (int i = 0; i < count; i++) {
+            if(System.currentTimeMillis() - startTime >= 5000){
+                running = false;
+                synchronized (lock){
+                    while(!running){
+                        try {
+                            lock.wait();
+                            startTime  = System.currentTimeMillis();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
             if (i % DigitsPerSum == 0) {
                 sum = 4 * sum(1, start)
                         - 2 * sum(4, start)
@@ -30,6 +55,7 @@ public class BBPThread extends Thread{
             sum = 16 * (sum - Math.floor(sum));
             digits[i] = (byte) sum;
         }
+        alive = false;
     }
 
     /// <summary>
@@ -97,5 +123,17 @@ public class BBPThread extends Thread{
 
     public byte[] getDigits(){
         return this.digits;
+    }
+
+    public Boolean getRunning() {
+        return running;
+    }
+
+    public void setRunning(Boolean running) {
+        this.running = running;
+    }
+
+    public Boolean Alive(){
+        return alive;
     }
 }
