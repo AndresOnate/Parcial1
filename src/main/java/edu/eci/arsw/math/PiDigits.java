@@ -30,6 +30,7 @@ public class PiDigits {
         byte[] digits = new byte[count];
         ArrayList<BBPThread> threads = new ArrayList<BBPThread>();
         Boolean imparSearch = false;
+        Boolean isRunning = true;
         int initialRange = start;
         int lastInterval = 0;
         int numDigits = count / N;
@@ -37,6 +38,7 @@ public class PiDigits {
             lastInterval = count - numDigits*(N-1);
             imparSearch = true;
         }
+        //Lógica con la distribución de los segmentos de cada hilo
         for(int i = 0; i < N; i++){
             BBPThread thread;
             if(imparSearch && i == N-1){
@@ -57,29 +59,38 @@ public class PiDigits {
             }
         }
         */
+
         int threadsDead = 0;
-        long startTime = System.currentTimeMillis();
-        while(threadsDead != N){
-            if(System.currentTimeMillis() - startTime >= 5000){
-                for(BBPThread t:  threads){
-                    System.out.println("Thread " + t.getId() + ": " + t.getDigits().length);
+        Scanner scanner = new Scanner(System.in);
+        // Lógica que detiene el programa cada 5 segundos y espera un ENTER del usuario
+        while(isRunning){
+            System.out.println("Ejecutando programa...");
+            try {
+                Thread.sleep(5000); // Esperar 5 segundos
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for(BBPThread t:  threads){
+                System.out.println("Thread " + t.getThreadId() + ": " + t.getDigits().length);
+                if(!t.Alive()){
+                    threadsDead +=1;
                 }
-                Scanner myObj = new Scanner(System.in);
-                String input = myObj.nextLine();
-                while(input != ""){
-                    input = myObj.nextLine();
+            }
+            if(threadsDead != N){
+                isRunning = false;
+            }
+            // Espera un ENTER del usuario para seguir con el programa, en caso de que aún se esté ejecutando
+            if(isRunning) {
+                System.out.println("Presiona ENTER para reanudar...");
+                String input = scanner.nextLine();
+                while (isRunning && !input.equals("")) {
+                    System.out.println("Presiona ENTER para reanudar...");
+                    input = scanner.nextLine();
                 }
-                for(BBPThread t:  threads){
-                    if(!t.Alive()){
-                        threadsDead += 1;
-                    }else{
-                        t.setRunning(true);
-                    }
-                }
-                synchronized(lock){
+                System.out.println("En 5 segundos se mostrará el número de dígitos procesados por cada hilo...");
+                synchronized (lock) {
                     lock.notifyAll();
                 }
-
             }
         }
 

@@ -16,14 +16,15 @@ public class Main {
     public static void main(String a[]) {
         // Cantidad de hilos
         int N = 5;
-        System.out.println(bytesToHex(PiDigits.getDigits(0, 10, N)));
-        System.out.println(bytesToHex(PiDigits.getDigits(1, 100, N)));
-        System.out.println(bytesToHex(PiDigits.getDigits(1, 1000000, N)));
+        System.out.println(bytesToHex(PiDigits.getDigits(0, 1000, N)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, N)));
+        //System.out.println(bytesToHex(PiDigits.getDigits(1, 1000000, N)));
     }
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static String bytesToHex(byte[] bytes) {
+        System.out.println("Digitos:");
         char[] hexChars = new char[bytes.length * 2];
         for (int j = 0; j < bytes.length; j++) {
             int v = bytes[j] & 0xFF;

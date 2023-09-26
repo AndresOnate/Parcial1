@@ -136,4 +136,8 @@ public class BBPThread extends Thread{
     public Boolean Alive(){
         return alive;
     }
+
+    public int getThreadId(){
+        return this.threadId;
+    }
 }
