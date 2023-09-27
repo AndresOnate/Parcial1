@@ -14,6 +14,8 @@ public class BBPThread extends Thread{
 
     private Boolean alive;
 
+    private int processedDigits;
+
 
     public BBPThread(int start, int count, int Id, Object lock){
         this.start = start;
@@ -23,6 +25,7 @@ public class BBPThread extends Thread{
         this.lock = lock;
         this.running = true;
         this.alive = true;
+        this.processedDigits = 0;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class BBPThread extends Thread{
 
             sum = 16 * (sum - Math.floor(sum));
             digits[i] = (byte) sum;
+            processedDigits += 1;
         }
         alive = false;
     }
@@ -139,5 +143,9 @@ public class BBPThread extends Thread{
 
     public int getThreadId(){
         return this.threadId;
+    }
+
+    public int getProcessedDigits() {
+        return processedDigits;
     }
 }

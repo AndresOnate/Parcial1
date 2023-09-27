@@ -71,7 +71,7 @@ public class PiDigits {
                 e.printStackTrace();
             }
             for(BBPThread t:  threads){
-                System.out.println("Thread " + t.getThreadId() + ": " + t.getDigits().length);
+                System.out.println("Thread " + t.getThreadId() + ": " + t.getProcessedDigits());
                 if(!t.Alive()){
                     threadsDead +=1;
                 }

@@ -15,8 +15,8 @@ public class Main {
 
     public static void main(String a[]) {
         // Cantidad de hilos
-        int N = 5;
-        System.out.println(bytesToHex(PiDigits.getDigits(0, 1000, N)));
+        int N = 3;
+        System.out.println(bytesToHex(PiDigits.getDigits(0, 10000, N)));
         //System.out.println(bytesToHex(PiDigits.getDigits(1, 100, N)));
         //System.out.println(bytesToHex(PiDigits.getDigits(1, 1000000, N)));
     }
